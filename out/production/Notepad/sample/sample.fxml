@@ -18,14 +18,14 @@
             <Menu text="File">
                 <items>
                     <MenuItem text="New" onAction="#newFile" />
-                    <MenuItem text="Open" />
-                    <MenuItem text="Save" disable="true"/>
-                    <MenuItem text="Save As" disable="true"/>
+                    <MenuItem text="Open" onAction="#openFile" />
+                    <MenuItem text="Save" onAction="#saveFile" />
+                    <MenuItem text="Save As" onAction="#saveFileAs"/>
                     <SeparatorMenuItem />
                     <MenuItem text="Exit" onAction="#exit"/>
                 </items>
             </Menu>
         </menus>
     </MenuBar>
-    <TextArea fx:id="editorArea" VBox.vgrow="ALWAYS" />
+    <TextArea fx:id="editorArea" VBox.vgrow="ALWAYS" onKeyPressed="#modified" />
 </VBox>
