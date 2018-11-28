@@ -3,10 +3,12 @@ package sample;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextArea;
+import javafx.print.JobSettings;
+import javafx.print.PageLayout;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
@@ -48,7 +50,7 @@ public class Controller {
      * Closing application, but first if modified/unsaved asking about saving(Confirmation Alert).
      */
     @FXML
-    protected void exit() {
+    protected void exit() {     //FIXME Exit without saving modified file by (X) button.
         if(isModified()) {
             if (saveOnExitAlert()>1)
                 saveFile();
@@ -179,7 +181,7 @@ public class Controller {
     @FXML
     protected void modified() {
         modified=true;
-    }
+    }   //FIXME Modified when using shortcuts for example Ctrl+N
 
     /**
      * Return boolean value if the file has been modified.
@@ -187,5 +189,17 @@ public class Controller {
      */
     protected boolean isModified() {
         return modified;
+    }
+
+    /**
+     * Printing content form editorArea.
+     */
+    @FXML
+    public void printFile() {
+        //FIXME After print text isn't wrapped. DONE ??? TEST IT
+        //FIXME Printing only first page.
+        FilePrinter filePrinter = new FilePrinter();
+
+        filePrinter.print(editorArea.getText());
     }
 }
