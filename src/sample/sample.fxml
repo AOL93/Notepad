@@ -9,7 +9,7 @@
                 <items>
                     <MenuItem text="New" onAction="#newFile" accelerator="Ctrl+N" />
                     <MenuItem text="Open" onAction="#openFile" accelerator="Ctrl+O" />
-                    <MenuItem text="Save" onAction="#saveFile" accelerator="Ctrl+S"/>
+                    <MenuItem text="Save" onAction="#saveFile" disable="${modified}" accelerator="Ctrl+S"/>
                     <MenuItem text="Save As" onAction="#saveFileAs"/>
                     <SeparatorMenuItem />
                     <MenuItem text="Print" onAction="#printFile" accelerator="Ctrl+P" />
@@ -19,5 +19,5 @@
             </Menu>
         </menus>
     </MenuBar>
-    <TextArea fx:id="editorArea" VBox.vgrow="ALWAYS" onKeyPressed="#modified" wrapText="true" />
+    <TextArea fx:id="editorArea" VBox.vgrow="ALWAYS" wrapText="true" />
 </VBox>
