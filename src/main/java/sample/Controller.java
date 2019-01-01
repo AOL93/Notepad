@@ -2,24 +2,27 @@ package sample;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import org.controlsfx.dialog.FontSelectorDialog;
 
 import java.io.*;
 import java.util.Optional;
 
 
-public class Controller {
+public class Controller implements PrimaryStageAware {
 
     @FXML
     private TextArea editorArea;
+    @FXML
+    private CheckMenuItem wrapCheck;
 
     private boolean modified;
     private File fileName;
     private String windowTitle;
+    private Stage primaryStage;
 
     @FXML
     public void initialize() {
@@ -28,6 +31,7 @@ public class Controller {
         editorArea.textProperty().addListener((observable, oldValue, newValue) -> {
             if(!isModified()) {
                 modified = true;
+                primaryStage.setTitle("*" + getTitle());
             }
         });
     }
@@ -45,6 +49,7 @@ public class Controller {
                     editorArea.clear();
                     modified=false;
                     fileName = null;
+                    primaryStage.setTitle(getTitle());
             }
         } else {
             editorArea.clear();
@@ -55,7 +60,7 @@ public class Controller {
      * Closing application, but first if modified/unsaved asking about saving(Confirmation Alert).
      */
     @FXML
-    protected void exit() {     //FIXME Exit without saving modified file by (X) button.
+    public boolean exit() {
         if(isModified()) {
             switch(saveOnExitAlert()) {
                 case 1:
@@ -63,8 +68,11 @@ public class Controller {
                 case 0:
                     Platform.exit();
                     break;
+                default:
+                    return false;
             }
         }
+        return true;
     }
 
     /**
@@ -108,6 +116,7 @@ public class Controller {
                 br.close();
                 modified=false;
                 fileName = file;
+                primaryStage.setTitle(getTitle());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -175,9 +184,10 @@ public class Controller {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(file));
                 bw.write(editorArea.getText());
                 bw.close();
-                System.out.println("Saving to file in PRO VERSION. $5,99");
+                //System.out.println("Saving to file in PRO VERSION. $5,99");
                 fileName = file;
                 modified = false;
+                primaryStage.setTitle(getTitle());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -197,16 +207,47 @@ public class Controller {
      */
     @FXML
     public void printFile() {
-        //FIXME Printing only first page.
         FilePrinter filePrinter = new FilePrinter();
-
         filePrinter.print(editorArea);
     }
 
+    /**
+     *  Return window Title. For new projects name is "Untitled - Notepad v0.0.1"
+     *  but if file is opened or save name title return file name with " - Notepad v0.0.1".
+     * @return Name of window.
+     */
     public String getTitle() {
         windowTitle = fileName==null ? "Untitled" : fileName.getName();
         windowTitle += " - Notepad v0.0.1";
 
         return  windowTitle;
+    }
+
+    /**
+     *  Display Font Selector Dialog and changing the editorArea font to selected.
+     */
+    public void chooseFont() {
+        FontSelectorDialog fontSelectorDialog = new FontSelectorDialog(editorArea.getFont());
+
+        fontSelectorDialog.setTitle("Choose font");
+        Optional<Font> font = fontSelectorDialog.showAndWait();
+
+        font.ifPresent(font1 -> editorArea.setFont(font1));
+    }
+
+    /**
+     * Changing wrap property for editorArea.
+     */
+    public void setWrapText() {
+        if( wrapCheck.isSelected() ) {
+            editorArea.setWrapText(true);
+        } else {
+            editorArea.setWrapText(false);
+        }
+    }
+
+    @Override
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
     }
 }

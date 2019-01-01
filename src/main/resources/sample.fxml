@@ -17,6 +17,12 @@
                     <MenuItem text="Exit" onAction="#exit" />
                 </items>
             </Menu>
+            <Menu text="Format">
+                <items>
+                    <CheckMenuItem fx:id="wrapCheck" text="Wrap text" onAction="#setWrapText" selected="true" />
+                    <MenuItem text="Font" onAction="#chooseFont"/>
+                </items>
+            </Menu>
         </menus>
     </MenuBar>
     <TextArea fx:id="editorArea" VBox.vgrow="ALWAYS" wrapText="true" />
