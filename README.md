@@ -1,0 +1,2 @@
+# Notepad
+The first program written by me is in JAVAFX. Its main function is creating new text files (.txt), opening/saving text files via File Chooser and printing them. In addition, the user can change font in editor area. While the program is running any modifications are being tracked to prevent data loss by closing the program without saving. If a file is modified but not saved, the program will display Confirm dialog and give the possibility to save the file.
